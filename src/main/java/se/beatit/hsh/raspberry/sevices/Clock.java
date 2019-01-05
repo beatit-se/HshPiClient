@@ -49,10 +49,13 @@ public class Clock implements DisplayService {
 
         switch (alarm.getState()) {
             case ALARMING:
-                graphics.setSubText("Wake up !!!");
+                graphics.setSubText("Wake up!!!");
                 break;
             case ON:
-                graphics.setSubText("Alarm: " + alarm.getAlarmTime());
+                graphics.setSubText("Alarm " + alarm.getAlarmTime());
+                break;
+            case SNOOZED:
+                graphics.setSubText("Snoozzzed ...");
                 break;
             default:
                 graphics.setSubText("");
@@ -63,8 +66,13 @@ public class Clock implements DisplayService {
     @Override
     public void setFocused(boolean focused) {
         this.focused = focused;
+
         if(focused) {
             showTime();
+        } else {
+            if(alarm.getState() == Alarm.State.ALARMING) {
+                alarm.turnOff();
+            }
         }
     }
 

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.chrono.ThaiBuddhistChronology;
@@ -50,7 +51,19 @@ public class Graphics  extends JFrame implements Runnable {
         setVisible(true);
         setLocationRelativeTo(null);
 
-        new Thread(this).start(); // keep alive
+        hidePointer();
+        keepPiAlive();
+    }
+
+    private void keepPiAlive() {
+        new Thread(this).start();
+    }
+
+    private void hidePointer() {
+        setCursor( getToolkit().createCustomCursor(
+                new BufferedImage( 1, 1, BufferedImage.TYPE_INT_ARGB ),
+                new Point(),
+                null ) );
     }
 
     public void setText(String text) {
@@ -75,7 +88,6 @@ public class Graphics  extends JFrame implements Runnable {
 
     private void keepAlive() {
         try {
-            //Point point = MouseInfo.getPointerInfo().getLocation();
             Robot robot = new Robot();
             robot.keyPress(65);
         } catch (AWTException e) {
